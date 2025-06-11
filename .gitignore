@@ -1,0 +1,4 @@
+.idea
+.data
+umami-exporter
+docker-compose.yml
