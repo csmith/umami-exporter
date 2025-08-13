@@ -91,3 +91,12 @@ services:
 Pull requests and issues are more than welcome. There are probably better ways
 to expose the data, more interesting things that could be exported, and so on.
 I'm open to suggestions!
+
+## Provenance
+
+This project was primarily created with Claude Code, but with a strong guiding
+hand. It's not "vibe coded", but an LLM was still the primary author of most
+lines of code. I believe it meets the same sort of standards I'd aim for with
+hand-crafted code, but some slop may slip through. I understand if you
+prefer not to use LLM-created software, and welcome human-authored alternatives
+(I just don't personally have the time/motivation to do so).
