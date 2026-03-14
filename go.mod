@@ -1,6 +1,6 @@
 module github.com/csmith/umami-exporter
 
-go 1.24.4
+go 1.25.0
 
 require (
 	github.com/csmith/envflag/v2 v2.0.0
@@ -25,9 +25,8 @@ require (
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/telemetry v0.0.0-20260209163413-e7419c687ee4 // indirect
 	golang.org/x/tools v0.42.0 // indirect
-	golang.org/x/tools/go/expect v0.1.1-deprecated // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
-	honnef.co/go/tools v0.6.1 // indirect
+	honnef.co/go/tools v0.7.0 // indirect
 )
 
 tool (
