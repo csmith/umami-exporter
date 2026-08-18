@@ -1,10 +1,11 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"log/slog"
 
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -33,7 +34,7 @@ const (
 )
 
 type DatabaseInterface interface {
-	Query(query string, args ...interface{}) (*sql.Rows, error)
+	Query(ctx context.Context, query string, args ...any) (pgx.Rows, error)
 }
 
 type UmamiCollector struct {
@@ -45,16 +46,19 @@ type UmamiCollector struct {
 }
 
 func NewUmamiCollector(databaseURL, websiteID string) (*UmamiCollector, error) {
-	db, err := sql.Open("postgres", databaseURL)
+	ctx := context.Background()
+
+	pool, err := pgxpool.New(ctx, databaseURL)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := db.Ping(); err != nil {
+	if err := pool.Ping(ctx); err != nil {
+		pool.Close()
 		return nil, err
 	}
 
-	return NewUmamiCollectorWithDB(db, websiteID), nil
+	return NewUmamiCollectorWithDB(pool, websiteID), nil
 }
 
 func NewUmamiCollectorWithDB(db DatabaseInterface, websiteID string) *UmamiCollector {
@@ -87,12 +91,11 @@ func (c *UmamiCollector) Collect(ch chan<- prometheus.Metric) {
 }
 
 func (c *UmamiCollector) collectPageViews(ch chan<- prometheus.Metric) {
-	rows, err := c.db.Query(pageViewsQuery, c.websiteID)
+	rows, err := c.db.Query(context.Background(), pageViewsQuery, c.websiteID)
 	if err != nil {
 		slog.Error("failed to query page views", "error", err)
 		return
 	}
-	defer rows.Close()
 
 	for rows.Next() {
 		var urlPath, referrerDomain, browser, os, device, country string
@@ -124,12 +127,11 @@ func (c *UmamiCollector) collectPageViews(ch chan<- prometheus.Metric) {
 }
 
 func (c *UmamiCollector) collectPagesPerVisit(ch chan<- prometheus.Metric) {
-	rows, err := c.db.Query(pagesPerVisitQuery, c.websiteID)
+	rows, err := c.db.Query(context.Background(), pagesPerVisitQuery, c.websiteID)
 	if err != nil {
 		slog.Error("failed to query pages per visit", "error", err)
 		return
 	}
-	defer rows.Close()
 
 	buckets := make(map[float64]uint64)
 	var totalCount uint64
