@@ -111,7 +111,12 @@ func (c *UmamiCollector) collectPageViews(ch chan<- prometheus.Metric) {
 			c.pageViewsDesc,
 			prometheus.CounterValue,
 			count,
-			urlPath, referrerDomain, browser, os, device, country,
+			urlPath,
+			referrerDomain,
+			browser,
+			os,
+			device,
+			country,
 		)
 		if err != nil {
 			slog.Error("failed to create page view metric", "error", err)

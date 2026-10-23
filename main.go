@@ -14,9 +14,13 @@ import (
 )
 
 var (
-	databaseURL = flag.String("database-url", "", "PostgreSQL connection URL (postgres://user:pass@host:port/dbname?sslmode=...)")
-	websiteID   = flag.String("website-id", "", "Umami website ID (UUID)")
-	port        = flag.Int("port", 8080, "HTTP server port")
+	databaseURL = flag.String(
+		"database-url",
+		"",
+		"PostgreSQL connection URL (postgres://user:pass@host:port/dbname?sslmode=...)",
+	)
+	websiteID = flag.String("website-id", "", "Umami website ID (UUID)")
+	port      = flag.Int("port", 8080, "HTTP server port")
 )
 
 func main() {
