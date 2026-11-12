@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2 - 2026-11-12
+
+- Update to Go 1.27.4
+- Other dependency updates
+
 ## 1.1.1 - 2026-10-23
 
 ### Changed
